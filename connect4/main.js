@@ -1,4 +1,4 @@
-const { addPiece, changeTurn } = require("./connect4-logic")
+const { addPiece, changeTurn, animations: { pieceAnimation } } = require("./connect4-logic")
 
 const buttonPVP = document.getElementById('PvP');
 const buttonPVB = document.getElementById('PvB');
@@ -79,38 +79,8 @@ const boardByColumns = [
 //El juego empieza en turno 1 (Jugador 1), y cuando es falso es turno del jugador 2
 let turn = 1;
 
-//Function for the animation of the pieces
-function pieceAnimation(column){
-    if (turn1 === true){
-        color = 'red';
-    }
-    else if (turn1 === false){
-        color = 'yellow';
-    }
-    counter = 5;
-    circle = document.getElementById(boardByColumns[column].content[counter].tag);
-    circle.classList.add(color);
-    interval = setInterval( ()=>{
-        if (boardByColumns[column].content[counter].value !== 0){
-            clearInterval(interval);
-        }
-        else if (boardByColumns[column].content[counter-1].value === 0){
-            circle.classList.remove(color);
-            counter -= 1;
-            circle = document.getElementById(boardByColumns[column].content[counter].tag);
-            circle.classList.add(color);
-        }
-        else if(boardByColumns[column].content[counter-1].value !== 0){
-            circle.classList.remove(color);
-            counter -= 1;
-            circle = document.getElementById(boardByColumns[column].content[counter].tag);
-            circle.classList.add(color);
-            clearInterval(interval);
-        }
-    }, 50);
-};
-
-var end = false;
+// variable que nos dice si la partida se ha acabado
+let end = false;
 
 //Given an array, check if there's 4enralla and activates the ending
 function check4InRow(array){
@@ -129,7 +99,7 @@ function check4InRow(array){
 function endGame(array, i){
     if (end === true){
         const endsentence = document.getElementById('endsentence');
-        endsentence.textContent = `The Winner is Player ${turn1?1:2}!`
+        endsentence.textContent = `The Winner is Player ${turn}!`
         const ending = document.getElementById('end');
         ending.classList.remove('hidden');
         for (var j=0; j<4; j++){
@@ -280,7 +250,7 @@ buttonPlayAgain.addEventListener('click',
         const startMenu = document.getElementById('choice');
         startMenu.classList.remove('hidden');
         //Reset turns
-        turn1 = true;
+        turn = 1;
         //Reset bot, end and draw
         bot = false;  
         end = false;
@@ -320,7 +290,7 @@ function botTurn(){
             scores = simulateAllScores();
             bestColumn = pickScores(scores)
             addPiece(boardByColumns, bestColumn, turn);
-            pieceAnimation(bestColumn);
+            pieceAnimation(boardByColumns, bestColumn, turn);
             checkResult(boardByColumns);
             changeTurn(turn);
         }, 500
@@ -331,7 +301,7 @@ function botTurn(){
 columns[0].addEventListener('click', 
     function a(){
         addPiece(boardByColumns, 0, turn);
-        pieceAnimation(0);
+        pieceAnimation(boardByColumns, 0, turn);
         checkResult(boardByColumns);
         changeTurn(turn);
         if (bot === true && end === false){
@@ -344,7 +314,7 @@ columns[0].addEventListener('click',
 columns[1].addEventListener('click',
     function b(){
         addPiece(boardByColumns, 1, turn);
-        pieceAnimation(1);
+        pieceAnimation(boardByColumns, 1, turn);
         checkResult(boardByColumns);
         changeTurn(turn);
         if (bot === true && end === false){
@@ -356,7 +326,7 @@ columns[1].addEventListener('click',
 columns[2].addEventListener('click',
     function c(){
         addPiece(boardByColumns, 2, turn);
-        pieceAnimation(2);
+        pieceAnimation(boardByColumns, 2, turn);
         checkResult(boardByColumns);
         changeTurn(turn);
         if (bot === true && end === false){
@@ -368,7 +338,7 @@ columns[2].addEventListener('click',
 columns[3].addEventListener('click',
     function d(){
         addPiece(boardByColumns, 3, turn);
-        pieceAnimation(3);
+        pieceAnimation(boardByColumns, 3, turn);
         checkResult(boardByColumns);
         changeTurn(turn);
         if (bot === true && end === false){
@@ -380,7 +350,7 @@ columns[3].addEventListener('click',
 columns[4].addEventListener('click',
     function e(){
         addPiece(boardByColumns, 4, turn);
-        pieceAnimation(4);
+        pieceAnimation(boardByColumns, 4, turn);
         checkResult(boardByColumns);
         changeTurn(turn);
         if (bot === true && end === false){
@@ -392,7 +362,7 @@ columns[4].addEventListener('click',
 columns[5].addEventListener('click',
     function f(){
         addPiece(boardByColumns, 5, turn);
-        pieceAnimation(5);
+        pieceAnimation(boardByColumns, 5, turn);
         checkResult(boardByColumns);
         changeTurn(turn);
         if (bot === true && end === false){
@@ -404,7 +374,7 @@ columns[5].addEventListener('click',
 columns[6].addEventListener('click',
     function g(){
         addPiece(boardByColumns, 6, turn);
-        pieceAnimation(6);
+        pieceAnimation(boardByColumns, 6, turn);
         checkResult(boardByColumns);
         changeTurn(turn);
         if (bot === true && end === false){
