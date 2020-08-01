@@ -1,15 +1,397 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+//An array that represents the board column by column
+module.exports = [
+    {
+        "column": "a",
+        "full": false,
+        "content": [
+            {
+                "tag": "a1",
+                "coordinates": [
+                    0,
+                    0
+                ],
+                "value": 0
+            },
+            {
+                "tag": "a2",
+                "coordinates": [
+                    0,
+                    1
+                ],
+                "value": 0
+            },
+            {
+                "tag": "a3",
+                "coordinates": [
+                    0,
+                    2
+                ],
+                "value": 0
+            },
+            {
+                "tag": "a4",
+                "coordinates": [
+                    0,
+                    3
+                ],
+                "value": 0
+            },
+            {
+                "tag": "a5",
+                "coordinates": [
+                    0,
+                    4
+                ],
+                "value": 0
+            },
+            {
+                "tag": "a6",
+                "coordinates": [
+                    0,
+                    5
+                ],
+                "value": 0
+            }
+        ]
+    },
+    {
+        "column": "b",
+        "full": false,
+        "content": [
+            {
+                "tag": "b1",
+                "coordinates": [
+                    1,
+                    0
+                ],
+                "value": 0
+            },
+            {
+                "tag": "b2",
+                "coordinates": [
+                    1,
+                    1
+                ],
+                "value": 0
+            },
+            {
+                "tag": "b3",
+                "coordinates": [
+                    1,
+                    2
+                ],
+                "value": 0
+            },
+            {
+                "tag": "b4",
+                "coordinates": [
+                    1,
+                    3
+                ],
+                "value": 0
+            },
+            {
+                "tag": "b5",
+                "coordinates": [
+                    1,
+                    4
+                ],
+                "value": 0
+            },
+            {
+                "tag": "b6",
+                "coordinates": [
+                    1,
+                    5
+                ],
+                "value": 0
+            }
+        ]
+    },
+    {
+        "column": "c",
+        "full": false,
+        "content": [
+            {
+                "tag": "c1",
+                "coordinates": [
+                    2,
+                    0
+                ],
+                "value": 0
+            },
+            {
+                "tag": "c2",
+                "coordinates": [
+                    2,
+                    1
+                ],
+                "value": 0
+            },
+            {
+                "tag": "c3",
+                "coordinates": [
+                    2,
+                    2
+                ],
+                "value": 0
+            },
+            {
+                "tag": "c4",
+                "coordinates": [
+                    2,
+                    3
+                ],
+                "value": 0
+            },
+            {
+                "tag": "c5",
+                "coordinates": [
+                    2,
+                    4
+                ],
+                "value": 0
+            },
+            {
+                "tag": "c6",
+                "coordinates": [
+                    2,
+                    5
+                ],
+                "value": 0
+            }
+        ]
+    },
+    {
+        "column": "d",
+        "full": false,
+        "content": [
+            {
+                "tag": "d1",
+                "coordinates": [
+                    3,
+                    0
+                ],
+                "value": 0
+            },
+            {
+                "tag": "d2",
+                "coordinates": [
+                    3,
+                    1
+                ],
+                "value": 0
+            },
+            {
+                "tag": "d3",
+                "coordinates": [
+                    3,
+                    2
+                ],
+                "value": 0
+            },
+            {
+                "tag": "d4",
+                "coordinates": [
+                    3,
+                    3
+                ],
+                "value": 0
+            },
+            {
+                "tag": "d5",
+                "coordinates": [
+                    3,
+                    4
+                ],
+                "value": 0
+            },
+            {
+                "tag": "d6",
+                "coordinates": [
+                    3,
+                    5
+                ],
+                "value": 0
+            }
+        ]
+    },
+    {
+        "column": "e",
+        "full": false,
+        "content": [
+            {
+                "tag": "e1",
+                "coordinates": [
+                    4,
+                    0
+                ],
+                "value": 0
+            },
+            {
+                "tag": "e2",
+                "coordinates": [
+                    4,
+                    1
+                ],
+                "value": 0
+            },
+            {
+                "tag": "e3",
+                "coordinates": [
+                    4,
+                    2
+                ],
+                "value": 0
+            },
+            {
+                "tag": "e4",
+                "coordinates": [
+                    4,
+                    3
+                ],
+                "value": 0
+            },
+            {
+                "tag": "e5",
+                "coordinates": [
+                    4,
+                    4
+                ],
+                "value": 0
+            },
+            {
+                "tag": "e6",
+                "coordinates": [
+                    4,
+                    5
+                ],
+                "value": 0
+            }
+        ]
+    },
+    {
+        "column": "f",
+        "full": false,
+        "content": [
+            {
+                "tag": "f1",
+                "coordinates": [
+                    5,
+                    0
+                ],
+                "value": 0
+            },
+            {
+                "tag": "f2",
+                "coordinates": [
+                    5,
+                    1
+                ],
+                "value": 0
+            },
+            {
+                "tag": "f3",
+                "coordinates": [
+                    5,
+                    2
+                ],
+                "value": 0
+            },
+            {
+                "tag": "f4",
+                "coordinates": [
+                    5,
+                    3
+                ],
+                "value": 0
+            },
+            {
+                "tag": "f5",
+                "coordinates": [
+                    5,
+                    4
+                ],
+                "value": 0
+            },
+            {
+                "tag": "f6",
+                "coordinates": [
+                    5,
+                    5
+                ],
+                "value": 0
+            }
+        ]
+    },
+    {
+        "column": "g",
+        "full": false,
+        "content": [
+            {
+                "tag": "g1",
+                "coordinates": [
+                    6,
+                    0
+                ],
+                "value": 0
+            },
+            {
+                "tag": "g2",
+                "coordinates": [
+                    6,
+                    1
+                ],
+                "value": 0
+            },
+            {
+                "tag": "g3",
+                "coordinates": [
+                    6,
+                    2
+                ],
+                "value": 0
+            },
+            {
+                "tag": "g4",
+                "coordinates": [
+                    6,
+                    3
+                ],
+                "value": 0
+            },
+            {
+                "tag": "g5",
+                "coordinates": [
+                    6,
+                    4
+                ],
+                "value": 0
+            },
+            {
+                "tag": "g6",
+                "coordinates": [
+                    6,
+                    5
+                ],
+                "value": 0
+            }
+        ]
+    }
+]
+},{}],2:[function(require,module,exports){
 //Adds a piece to the board
 
 module.exports = function (board, column, turn){
 
     let done = false
 
-    board[column].full === false && board[column].content.forEach(({value, coordinates})=>{
+    board[column].full === false && board[column].content.forEach(({value, coordinates}, i, array)=>{
         if(value === 0 && done === false){
             done = true
 
-            value = turn
+            board[column].content[i].value = turn
 
             if (coordinates[1] === 5) board[column].full = true
         }
@@ -39,64 +421,23 @@ module.exports = function (board, column, turn){
 //         }
 //     }
 // };
-},{}],2:[function(require,module,exports){
-module.exports = {
-    pieceAnimation: require('./piece-animation.js')
-}
-},{"./piece-animation.js":3}],3:[function(require,module,exports){
-//Function for the animation of the  falling
-module.exports = function (board, column, turn) {
-
-    let color = ['', 'red', 'yellow'][turn]
-
-    function sleep(ms) {
-        return new Promise(res => setTimeout(res, ms));
-    }
-
-    const array = board[column].content.reverse()
-
-    let circle = document.getElementById(array[0].tag);
-
-    circle.classList.add(color);
-
-    let stop = false
-
-    array.forEach(async ({ value }, counter, array) => {
-        await sleep(counter * 50)
-
-        if (value !== 0 || array[counter + 1] === undefined) return stop = true
-        else if (array[counter + 1].value === 0 && stop === false) {
-            circle.classList.remove(color)
-
-            circle = document.getElementById(array[counter+1].tag)
-
-            circle.classList.add(color)
-        }
-        else if (array[counter + 1].value !== 0 && stop === false) {
-            circle.classList.remove(color)
-
-            circle = document.getElementById(array[counter+1].tag)
-
-            circle.classList.add(color)
-        }
-
-    })
-};
-
-},{}],4:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 //Cambia de turno: cambia la variable turn y lo representa en el tablero
+
+const changeTurn = require('../change-turn.js')
 
 module.exports = function (turn){
     const docTurn = document.getElementById('turn');
 
     docTurn.classList.remove(`player${turn}`);
 
-    if (turn === 1) turn = 2
-    else if (turn === 2) turn = 1
+    turn = changeTurn(turn)
 
     docTurn.textContent = `Player ${turn}`;
     
     docTurn.classList.add(`player${turn}`);
+
+    return turn
 }
 
 
@@ -114,14 +455,87 @@ module.exports = function (turn){
 
 //     docTurn.classList.add(`player${turn}`);
 // }
-},{}],5:[function(require,module,exports){
+},{"../change-turn.js":6}],4:[function(require,module,exports){
+module.exports = {
+    pieceAnimation: require('./piece-animation.js'),
+    changeTurnAnimation: require('./change-turn-animation')
+}
+},{"./change-turn-animation":3,"./piece-animation.js":5}],5:[function(require,module,exports){
+//Function for the animation of the  falling piece 
+module.exports = async function (board, column, turn) {
+
+    const color = ['', 'red', 'yellow'][turn]
+
+    function sleep(ms) {
+        return new Promise(res => setTimeout(res, ms));
+    }
+
+    const array = board[column].content
+    const positionArray = [5, 4, 3, 2, 1, 0]
+
+    let circle = document.getElementById(array[5].tag);
+
+    circle.classList.add(color);
+
+    let stop = false
+
+    await array.forEach(async (notUsed, counter, array) => {
+        await sleep(counter * 50)
+
+        const { value } = array[positionArray[counter]]
+
+        const nextElement = array[positionArray[counter+ 1]]
+
+        if (value !== 0 || nextElement === undefined) return stop = true
+
+        const { value: nextValue } = nextElement
+
+        if (nextValue === 0 && stop === false) {
+            circle.classList.remove(color)
+
+            circle = document.getElementById(nextElement.tag)
+
+            circle.classList.add(color)
+        } else if (nextValue !== 0 && stop === false) {
+            circle.classList.remove(color)
+
+            circle = document.getElementById(nextElement.tag)
+
+            circle.classList.add(color)
+        }
+    })
+}
+
+},{}],6:[function(require,module,exports){
+module.exports = function (turn){
+    if (turn === 1) return turn = 2
+    else if (turn === 2) return turn = 1
+}
+},{}],7:[function(require,module,exports){
+module.exports = function (func, wait, immediate) {
+	var timeout;
+	return function() {
+		var context = this, args = arguments;
+		var later = function() {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		var callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
+};
+},{}],8:[function(require,module,exports){
 module.exports = {
     addPiece: require("./add-piece-to-board.js"),
     changeTurn: require("./change-turn.js"),
-    animations: require("./animations")    
+    animations: require("./animations")    ,
+    debounce: require('./helpers/debounce.js')
 }
-},{"./add-piece-to-board.js":1,"./animations":2,"./change-turn.js":4}],6:[function(require,module,exports){
-const { addPiece, changeTurn, animations: { pieceAnimation } } = require("./connect4-logic")
+},{"./add-piece-to-board.js":2,"./animations":4,"./change-turn.js":6,"./helpers/debounce.js":7}],9:[function(require,module,exports){
+const { addPiece, debounce, animations: { pieceAnimation, changeTurnAnimation } } = require("./connect4-logic")
+const boardByColumns = require('./connect4-data/board.js')
 
 const buttonPVP = document.getElementById('PvP');
 const buttonPVB = document.getElementById('PvB');
@@ -138,66 +552,6 @@ for (i in columns){
     })
 }
 
-
-//We generate an array that represents the board column by column
-const boardByColumns = [
-    {column: 'a', full: false, content: 
-    [{tag: 'a1', coordinates: [0,0], value: 0},
-    {tag: 'a2', coordinates: [0,1], value: 0},
-    {tag: 'a3', coordinates: [0,2], value: 0},
-    {tag: 'a4', coordinates: [0,3], value: 0},
-    {tag: 'a5', coordinates: [0,4], value: 0},
-    {tag: 'a6', coordinates: [0,5], value: 0}
-    ]}, 
-    {column: 'b', full: false, content: 
-    [{tag: 'b1', coordinates: [1,0], value: 0},
-    {tag: 'b2', coordinates: [1,1], value: 0},
-    {tag: 'b3', coordinates: [1,2], value: 0},
-    {tag: 'b4', coordinates: [1,3], value: 0},
-    {tag: 'b5', coordinates: [1,4], value: 0},
-    {tag: 'b6', coordinates: [1,5], value: 0}
-    ]},
-    {column: 'c', full: false, content: 
-    [{tag: 'c1', coordinates: [2,0], value: 0},
-    {tag: 'c2', coordinates: [2,1], value: 0},
-    {tag: 'c3', coordinates: [2,2], value: 0},
-    {tag: 'c4', coordinates: [2,3], value: 0},
-    {tag: 'c5', coordinates: [2,4], value: 0},
-    {tag: 'c6', coordinates: [2,5], value: 0}
-    ]},    
-    {column: 'd', full: false, content: 
-    [{tag: 'd1', coordinates: [3,0], value: 0},
-    {tag: 'd2', coordinates: [3,1], value: 0},
-    {tag: 'd3', coordinates: [3,2], value: 0},
-    {tag: 'd4', coordinates: [3,3], value: 0},
-    {tag: 'd5', coordinates: [3,4], value: 0},
-    {tag: 'd6', coordinates: [3,5], value: 0}
-    ]},  
-    {column: 'e', full: false, content: 
-    [{tag: 'e1', coordinates: [4,0], value: 0},
-    {tag: 'e2', coordinates: [4,1], value: 0},
-    {tag: 'e3', coordinates: [4,2], value: 0},
-    {tag: 'e4', coordinates: [4,3], value: 0},
-    {tag: 'e5', coordinates: [4,4], value: 0},
-    {tag: 'e6', coordinates: [4,5], value: 0}
-    ]}, 
-    {column: 'f', full: false, content: 
-    [{tag: 'f1', coordinates: [5,0], value: 0},
-    {tag: 'f2', coordinates: [5,1], value: 0},
-    {tag: 'f3', coordinates: [5,2], value: 0},
-    {tag: 'f4', coordinates: [5,3], value: 0},
-    {tag: 'f5', coordinates: [5,4], value: 0},
-    {tag: 'f6', coordinates: [5,5], value: 0}
-    ]},
-    {column: 'g', full: false, content: 
-    [{tag: 'g1', coordinates: [6,0], value: 0},
-    {tag: 'g2', coordinates: [6,1], value: 0},
-    {tag: 'g3', coordinates: [6,2], value: 0},
-    {tag: 'g4', coordinates: [6,3], value: 0},
-    {tag: 'g5', coordinates: [6,4], value: 0},
-    {tag: 'g6', coordinates: [6,5], value: 0}
-    ]}
-]
 
 //El juego empieza en turno 1 (Jugador 1), y cuando es falso es turno del jugador 2
 let turn = 1;
@@ -415,18 +769,18 @@ function botTurn(){
             addPiece(boardByColumns, bestColumn, turn);
             pieceAnimation(boardByColumns, bestColumn, turn);
             checkResult(boardByColumns);
-            changeTurn(turn);
+            turn = changeTurnAnimation(turn);
         }, 500
     )
 }
 
 
 columns[0].addEventListener('click', 
-    function a(){
+    async function a(){
         addPiece(boardByColumns, 0, turn);
-        pieceAnimation(boardByColumns, 0, turn);
+        await pieceAnimation(boardByColumns, 0, turn);
         checkResult(boardByColumns);
-        changeTurn(turn);
+        turn = changeTurnAnimation(turn);
         if (bot === true && end === false){
             botTurn();
         }
@@ -439,7 +793,7 @@ columns[1].addEventListener('click',
         addPiece(boardByColumns, 1, turn);
         pieceAnimation(boardByColumns, 1, turn);
         checkResult(boardByColumns);
-        changeTurn(turn);
+        turn = changeTurnAnimation(turn);
         if (bot === true && end === false){
             botTurn();
         }
@@ -451,7 +805,7 @@ columns[2].addEventListener('click',
         addPiece(boardByColumns, 2, turn);
         pieceAnimation(boardByColumns, 2, turn);
         checkResult(boardByColumns);
-        changeTurn(turn);
+        turn = changeTurnAnimation(turn);
         if (bot === true && end === false){
             botTurn();
         }
@@ -463,7 +817,7 @@ columns[3].addEventListener('click',
         addPiece(boardByColumns, 3, turn);
         pieceAnimation(boardByColumns, 3, turn);
         checkResult(boardByColumns);
-        changeTurn(turn);
+        turn = changeTurnAnimation(turn);
         if (bot === true && end === false){
             botTurn();
         }
@@ -475,7 +829,7 @@ columns[4].addEventListener('click',
         addPiece(boardByColumns, 4, turn);
         pieceAnimation(boardByColumns, 4, turn);
         checkResult(boardByColumns);
-        changeTurn(turn);
+        turn = changeTurnAnimation(turn);
         if (bot === true && end === false){
             botTurn();
         }
@@ -487,7 +841,7 @@ columns[5].addEventListener('click',
         addPiece(boardByColumns, 5, turn);
         pieceAnimation(boardByColumns, 5, turn);
         checkResult(boardByColumns);
-        changeTurn(turn);
+        turn = changeTurnAnimation(turn);
         if (bot === true && end === false){
             botTurn();
         }
@@ -499,7 +853,7 @@ columns[6].addEventListener('click',
         addPiece(boardByColumns, 6, turn);
         pieceAnimation(boardByColumns, 6, turn);
         checkResult(boardByColumns);
-        changeTurn(turn);
+        turn = changeTurnAnimation(turn);
         if (bot === true && end === false){
             botTurn();
         }
@@ -787,4 +1141,4 @@ function pickScores(scores){
         };
     };
 };
-},{"./connect4-logic":5}]},{},[6]);
+},{"./connect4-data/board.js":1,"./connect4-logic":8}]},{},[9]);
