@@ -397,30 +397,6 @@ module.exports = function (board, column, turn){
         }
     })
 }
-
-
-// function addPiece(board, column){
-
-//     if (board[column].full === false){
-
-//         for (var i=0; i<6; i++){
-
-//             if (board[column].content[i].value === 0){
-//                 if (turn1 === true){
-//                     board[column].content[i].value = 1;     
-//                 }
-//                 else if(turn1 === false){
-//                     board[column].content[i].value = 2;
-//                 };
-
-//                 if (i === 5){
-//                     board[column].full = true;
-//                 }
-//                 return
-//             }
-//         }
-//     }
-// };
 },{}],3:[function(require,module,exports){
 //Cambia de turno: cambia la variable turn y lo representa en el tablero
 
@@ -455,12 +431,32 @@ module.exports = function (turn){
 
 //     docTurn.classList.add(`player${turn}`);
 // }
-},{"../change-turn.js":6}],4:[function(require,module,exports){
+},{"../change-turn.js":7}],4:[function(require,module,exports){
+module.exports = function(end, draw, turn, array, n){
+    if (end === true){
+        const endsentence = document.getElementById('endsentence');
+        endsentence.textContent = `The Winner is Player ${turn}!`
+        const ending = document.getElementById('end');
+        ending.classList.remove('hidden');
+        for (var j=0; j<4; j++){
+            var winspot = document.getElementById(array[n+j].tag);
+            winspot.classList.add('winspot');
+        }
+    }
+    if (draw === true){
+        const endsentence = document.getElementById('endsentence');
+        endsentence.textContent = `The Game Ended in a Draw!`
+        const ending = document.getElementById('end');
+        ending.classList.remove('hidden');
+    }
+}
+},{}],5:[function(require,module,exports){
 module.exports = {
     pieceAnimation: require('./piece-animation.js'),
-    changeTurnAnimation: require('./change-turn-animation')
+    changeTurnAnimation: require('./change-turn-animation.js'),
+    endGame: require('./end-game.js')
 }
-},{"./change-turn-animation":3,"./piece-animation.js":5}],5:[function(require,module,exports){
+},{"./change-turn-animation.js":3,"./end-game.js":4,"./piece-animation.js":6}],6:[function(require,module,exports){
 //Function for the animation of the  falling piece 
 module.exports = async function (board, column, turn) {
 
@@ -506,12 +502,26 @@ module.exports = async function (board, column, turn) {
     })
 }
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 module.exports = function (turn){
     if (turn === 1) return turn = 2
     else if (turn === 2) return turn = 1
 }
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
+//Given an array, check if there's 4enralla an
+module.exports = function (array) {
+    for (var i = 0; i < (array.length - 3); i++) {
+        if (array[i].value !== 0 &&
+            (array[i].value === array[i + 1].value) &&
+            (array[i + 1].value === array[i + 2].value) &&
+            (array[i + 2].value === array[i + 3].value)) {
+
+            return {end: true, n: i}
+        };
+    };
+    return {end: false, n: i}
+};
+},{}],9:[function(require,module,exports){
 module.exports = function (func, wait, immediate) {
 	var timeout;
 	return function() {
@@ -526,15 +536,17 @@ module.exports = function (func, wait, immediate) {
 		if (callNow) func.apply(context, args);
 	};
 };
-},{}],8:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 module.exports = {
     addPiece: require("./add-piece-to-board.js"),
     changeTurn: require("./change-turn.js"),
     animations: require("./animations")    ,
-    debounce: require('./helpers/debounce.js')
+    debounce: require('./helpers/debounce.js'),
+    check4InRow: require('./check-4-in-row.js')
 }
-},{"./add-piece-to-board.js":2,"./animations":4,"./change-turn.js":6,"./helpers/debounce.js":7}],9:[function(require,module,exports){
-const { addPiece, debounce, animations: { pieceAnimation, changeTurnAnimation } } = require("./connect4-logic")
+},{"./add-piece-to-board.js":2,"./animations":5,"./change-turn.js":7,"./check-4-in-row.js":8,"./helpers/debounce.js":9}],11:[function(require,module,exports){
+const { addPiece, debounce, check4InRow, animations: { pieceAnimation, changeTurnAnimation, endGame } } = require("./connect4-logic")
+
 const boardByColumns = require('./connect4-data/board.js')
 
 const buttonPVP = document.getElementById('PvP');
@@ -552,50 +564,18 @@ for (i in columns){
     })
 }
 
-
 //El juego empieza en turno 1 (Jugador 1), y cuando es falso es turno del jugador 2
 let turn = 1;
 
 // variable que nos dice si la partida se ha acabado
 let end = false;
 
-//Given an array, check if there's 4enralla and activates the ending
-function check4InRow(array){
-    for (var i=0; i<(array.length-3); i++) {
-        if ( array[i].value !== 0 && 
-            (array[i].value === array[i+1].value) && 
-            (array[i+1].value === array[i+2].value) && 
-            (array[i+2].value === array [i+3].value)){
-                end = true;
-                endGame(array, i);
-            return;
-        };
-    };
-};
-
-function endGame(array, i){
-    if (end === true){
-        const endsentence = document.getElementById('endsentence');
-        endsentence.textContent = `The Winner is Player ${turn}!`
-        const ending = document.getElementById('end');
-        ending.classList.remove('hidden');
-        for (var j=0; j<4; j++){
-            var winspot = document.getElementById(array[i+j].tag);
-            winspot.classList.add('winspot');
-        }
-    }
-    if (draw === true){
-        const endsentence = document.getElementById('endsentence');
-        endsentence.textContent = `The Game Ended in a Draw!`
-        const ending = document.getElementById('end');
-        ending.classList.remove('hidden');
-    }
-    
-}
 //Checks4inARow in the direction of the columns
 function checkColumns(){
     for (var i=0; i<boardByColumns.length; i++){
-        check4InRow(boardByColumns[i].content)
+        const array = boardByColumns[i].content
+        const {end, n} = check4InRow(array)
+        endGame(end, draw, turn, array, n);
     };
 };
 
@@ -619,7 +599,8 @@ function checkRows(boardByColumns){
     boardByRows = returnBoardByRows(boardByColumns);
 
     for (var i=0; i<boardByRows.length; i++){
-        check4InRow(boardByRows[i].content)
+        end = check4InRow(boardByRows[i].content)
+        endGame(end, draw, turn);
     };
 }
 
@@ -681,9 +662,10 @@ function checkDiagonals(boardByColumns){
     var diagonalsBotTop = returnDiagonalsBotTop(boardByColumns);
 
     for (var i=0; i<diagonalsTopBot.length; i++){
-        check4InRow(diagonalsTopBot[i].content);
-        check4InRow(diagonalsBotTop[i].content);
-    }
+        end = check4InRow(diagonalsTopBot[i].content);
+        endGame(end, draw, turn);
+        end = check4InRow(diagonalsBotTop[i].content);
+        endGame(end, draw, turn);    }
 };
 
 var draw = false;
@@ -698,13 +680,12 @@ function checkDraw(){
         draw = true;
     }
 }
+
 //Checks4inARow in all possible positions
 function checkResult(boardByColumns){
-    checkColumns(boardByColumns);
-    checkRows(boardByColumns);
-    checkDiagonals(boardByColumns);
-    checkDraw();
-    endGame();
+    end = checkColumns(boardByColumns) || checkRows(boardByColumns) || checkDiagonals(boardByColumns);
+    draw = checkDraw();
+    endGame(end, draw, turn);
 };
 
 
@@ -761,6 +742,8 @@ buttonPVB.addEventListener('click',
 //se chequea si hay un 4 en raya y se cambia de turno
 //Si el bot está activo, se ejecuta su turno también y se devuelve el turno al jugador 1
 
+//TODO add debounce to the onClick
+
 function botTurn(){
     setTimeout(
         () =>{
@@ -776,9 +759,9 @@ function botTurn(){
 
 
 columns[0].addEventListener('click', 
-    async function a(){
+    function a(){
         addPiece(boardByColumns, 0, turn);
-        await pieceAnimation(boardByColumns, 0, turn);
+        pieceAnimation(boardByColumns, 0, turn);
         checkResult(boardByColumns);
         turn = changeTurnAnimation(turn);
         if (bot === true && end === false){
@@ -1141,4 +1124,4 @@ function pickScores(scores){
         };
     };
 };
-},{"./connect4-data/board.js":1,"./connect4-logic":8}]},{},[9]);
+},{"./connect4-data/board.js":1,"./connect4-logic":10}]},{},[11]);

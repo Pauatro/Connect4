@@ -14,27 +14,3 @@ module.exports = function (board, column, turn){
         }
     })
 }
-
-
-// function addPiece(board, column){
-
-//     if (board[column].full === false){
-
-//         for (var i=0; i<6; i++){
-
-//             if (board[column].content[i].value === 0){
-//                 if (turn1 === true){
-//                     board[column].content[i].value = 1;     
-//                 }
-//                 else if(turn1 === false){
-//                     board[column].content[i].value = 2;
-//                 };
-
-//                 if (i === 5){
-//                     board[column].full = true;
-//                 }
-//                 return
-//             }
-//         }
-//     }
-// };

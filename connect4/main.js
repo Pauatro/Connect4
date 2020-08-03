@@ -1,4 +1,5 @@
-const { addPiece, debounce, animations: { pieceAnimation, changeTurnAnimation } } = require("./connect4-logic")
+const { addPiece, debounce, check4InRow, animations: { pieceAnimation, changeTurnAnimation, endGame } } = require("./connect4-logic")
+
 const boardByColumns = require('./connect4-data/board.js')
 
 const buttonPVP = document.getElementById('PvP');
@@ -16,50 +17,17 @@ for (i in columns){
     })
 }
 
-
-//El juego empieza en turno 1 (Jugador 1), y cuando es falso es turno del jugador 2
+//El juego empieza en turno 1 (Jugador 1), y alterna entre 1 y 2
 let turn = 1;
 
-// variable que nos dice si la partida se ha acabado
-let end = false;
-
-//Given an array, check if there's 4enralla and activates the ending
-function check4InRow(array){
-    for (var i=0; i<(array.length-3); i++) {
-        if ( array[i].value !== 0 && 
-            (array[i].value === array[i+1].value) && 
-            (array[i+1].value === array[i+2].value) && 
-            (array[i+2].value === array [i+3].value)){
-                end = true;
-                endGame(array, i);
-            return;
-        };
-    };
-};
-
-function endGame(array, i){
-    if (end === true){
-        const endsentence = document.getElementById('endsentence');
-        endsentence.textContent = `The Winner is Player ${turn}!`
-        const ending = document.getElementById('end');
-        ending.classList.remove('hidden');
-        for (var j=0; j<4; j++){
-            var winspot = document.getElementById(array[i+j].tag);
-            winspot.classList.add('winspot');
-        }
-    }
-    if (draw === true){
-        const endsentence = document.getElementById('endsentence');
-        endsentence.textContent = `The Game Ended in a Draw!`
-        const ending = document.getElementById('end');
-        ending.classList.remove('hidden');
-    }
-    
-}
 //Checks4inARow in the direction of the columns
 function checkColumns(){
     for (var i=0; i<boardByColumns.length; i++){
-        check4InRow(boardByColumns[i].content)
+        const array = boardByColumns[i].content
+
+        const {end, n} = check4InRow(array)
+
+        endGame(end, draw, turn, array, n);
     };
 };
 
@@ -83,7 +51,9 @@ function checkRows(boardByColumns){
     boardByRows = returnBoardByRows(boardByColumns);
 
     for (var i=0; i<boardByRows.length; i++){
-        check4InRow(boardByRows[i].content)
+        const {end, n} = check4InRow(boardByRows[i].content)
+
+        endGame(end, draw, turn, array, n);
     };
 }
 
@@ -145,8 +115,10 @@ function checkDiagonals(boardByColumns){
     var diagonalsBotTop = returnDiagonalsBotTop(boardByColumns);
 
     for (var i=0; i<diagonalsTopBot.length; i++){
-        check4InRow(diagonalsTopBot[i].content);
-        check4InRow(diagonalsBotTop[i].content);
+        let {end, n} = check4InRow(diagonalsTopBot[i].content);
+        endGame(end, draw, turn, array, n);
+        let {end, n} = check4InRow(diagonalsBotTop[i].content);
+        endGame(end, draw, turn, array, n);    
     }
 };
 
@@ -162,13 +134,24 @@ function checkDraw(){
         draw = true;
     }
 }
+
 //Checks4inARow in all possible positions
 function checkResult(boardByColumns){
-    checkColumns(boardByColumns);
-    checkRows(boardByColumns);
-    checkDiagonals(boardByColumns);
-    checkDraw();
-    endGame();
+    let {end, n} = checkColumns(boardByColumns) 
+
+    endGame(end, draw, turn, array, n);    
+
+    let {end, n} = checkRows(boardByColumns) 
+
+    endGame(end, draw, turn, array, n);    
+
+    let {end, n} = checkDiagonals(boardByColumns)
+
+    endGame(end, draw, turn, array, n);    
+
+    const draw = checkDraw();
+
+    endGame(end, draw, turn, array, n);
 };
 
 
@@ -192,10 +175,8 @@ buttonPlayAgain.addEventListener('click',
         startMenu.classList.remove('hidden');
         //Reset turns
         turn = 1;
-        //Reset bot, end and draw
+        //Reset bot
         bot = false;  
-        end = false;
-        draw = false;
     }
 )
 
@@ -224,6 +205,8 @@ buttonPVB.addEventListener('click',
 //luego se ejecuta la animación,
 //se chequea si hay un 4 en raya y se cambia de turno
 //Si el bot está activo, se ejecuta su turno también y se devuelve el turno al jugador 1
+
+//TODO add debounce to the onClick
 
 function botTurn(){
     setTimeout(
