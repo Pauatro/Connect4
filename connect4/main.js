@@ -1,4 +1,4 @@
-const { addPiece, debounce, check4InRow, animations: { pieceAnimation, changeTurnAnimation, endGame } } = require("./connect4-logic")
+const { addPiece, debounce, animations: { pieceAnimation, changeTurnAnimation } } = require("./connect4-logic")
 
 const boardByColumns = require('./connect4-data/board.js')
 
@@ -19,140 +19,6 @@ for (i in columns){
 
 //El juego empieza en turno 1 (Jugador 1), y alterna entre 1 y 2
 let turn = 1;
-
-//Checks4inARow in the direction of the columns
-function checkColumns(){
-    for (var i=0; i<boardByColumns.length; i++){
-        const array = boardByColumns[i].content
-
-        const {end, n} = check4InRow(array)
-
-        endGame(end, draw, turn, array, n);
-    };
-};
-
-//Generates an array that represents the board row by row
-function returnBoardByRows(boardByColumns){
-    var boardByRows = []
-    for (var i=0; i<6;i++){
-        row = {content: []};
-        for (var j=0; j<7; j++){
-            row.content.push(
-                boardByColumns[j].content[5-i]
-            )
-        }
-        boardByRows.push(row);
-    }
-    return boardByRows;
-}
-
-//Checks4inARow in the direction of the rows
-function checkRows(boardByColumns){
-    boardByRows = returnBoardByRows(boardByColumns);
-
-    for (var i=0; i<boardByRows.length; i++){
-        const {end, n} = check4InRow(boardByRows[i].content)
-
-        endGame(end, draw, turn, array, n);
-    };
-}
-
-//Generates an array that represents the board diagonal by diagonal (only de diagonals with 4 or more slots,
-// which can actualy have relevant patterns)
-function returnDiagonalsTopBot(boardByColumns){
-
-    var diagonalsTopBot = []
-
-    for(var i=0; i<3; i++){
-        diagonal = {content: []};
-        for (var j=0; j<(i+4); j++){
-            diagonal.content.push(
-                boardByColumns[j].content[i+3-j]
-            );
-        }
-        diagonalsTopBot.push(diagonal);
-    }
-
-    for(var i=0; i<3; i++){
-        diagonal = {content: []};
-        for (var j=0; j<(6-i); j++){
-            diagonal.content.push(
-                boardByColumns[i+j+1].content[5-j]
-            );
-        }
-        diagonalsTopBot.push(diagonal);
-    }
-    return diagonalsTopBot;
-};
-function returnDiagonalsBotTop(boardByColumns){
-    var diagonalsBotTop = []
-
-    for(var i=0; i<3; i++){
-        diagonal = {diagonal: i+1, content: []};
-        for (var j=0; j<(i+4); j++){
-            diagonal.content.push(
-                boardByColumns[j].content[2-i+j]
-            );
-        }
-        diagonalsBotTop.push(diagonal);
-    }
-
-    for(var i=0; i<3; i++){
-        diagonal = {diagonal: i+4, content: []};
-        for (var j=0; j<(6-i); j++){
-            diagonal.content.push(
-                boardByColumns[i+j+1].content[j]
-            );
-        }
-        diagonalsBotTop.push(diagonal);
-    }
-    return diagonalsBotTop;
-};
-
-//Checks4inARow in all the diagonals
-function checkDiagonals(boardByColumns){
-    var diagonalsTopBot = returnDiagonalsTopBot(boardByColumns);
-    var diagonalsBotTop = returnDiagonalsBotTop(boardByColumns);
-
-    for (var i=0; i<diagonalsTopBot.length; i++){
-        let {end, n} = check4InRow(diagonalsTopBot[i].content);
-        endGame(end, draw, turn, array, n);
-        let {end, n} = check4InRow(diagonalsBotTop[i].content);
-        endGame(end, draw, turn, array, n);    
-    }
-};
-
-var draw = false;
-function checkDraw(){
-    var drawScore = 0
-    for (column of boardByColumns){
-        if (column.full === true){
-            drawScore += 1
-        }
-    }
-    if (drawScore === 7){
-        draw = true;
-    }
-}
-
-//Checks4inARow in all possible positions
-function checkResult(boardByColumns){
-    let {end, n} = checkColumns(boardByColumns) 
-
-    endGame(end, draw, turn, array, n);    
-
-    let {end, n} = checkRows(boardByColumns) 
-
-    endGame(end, draw, turn, array, n);    
-
-    let {end, n} = checkDiagonals(boardByColumns)
-
-    endGame(end, draw, turn, array, n);    
-
-    const draw = checkDraw();
-
-    endGame(end, draw, turn, array, n);
-};
 
 
 buttonPlayAgain.addEventListener('click',
@@ -215,7 +81,7 @@ function botTurn(){
             bestColumn = pickScores(scores)
             addPiece(boardByColumns, bestColumn, turn);
             pieceAnimation(boardByColumns, bestColumn, turn);
-            checkResult(boardByColumns);
+            checkResult(boardByColumns, turn);
             turn = changeTurnAnimation(turn);
         }, 500
     )
@@ -226,7 +92,7 @@ columns[0].addEventListener('click',
     function a(){
         addPiece(boardByColumns, 0, turn);
         pieceAnimation(boardByColumns, 0, turn);
-        checkResult(boardByColumns);
+        checkResult(boardByColumns, turn);
         turn = changeTurnAnimation(turn);
         if (bot === true && end === false){
             botTurn();
@@ -239,7 +105,7 @@ columns[1].addEventListener('click',
     function b(){
         addPiece(boardByColumns, 1, turn);
         pieceAnimation(boardByColumns, 1, turn);
-        checkResult(boardByColumns);
+        checkResult(boardByColumns, turn);
         turn = changeTurnAnimation(turn);
         if (bot === true && end === false){
             botTurn();
@@ -251,7 +117,7 @@ columns[2].addEventListener('click',
     function c(){
         addPiece(boardByColumns, 2, turn);
         pieceAnimation(boardByColumns, 2, turn);
-        checkResult(boardByColumns);
+        checkResult(boardByColumns, turn);
         turn = changeTurnAnimation(turn);
         if (bot === true && end === false){
             botTurn();
@@ -263,7 +129,7 @@ columns[3].addEventListener('click',
     function d(){
         addPiece(boardByColumns, 3, turn);
         pieceAnimation(boardByColumns, 3, turn);
-        checkResult(boardByColumns);
+        checkResult(boardByColumns, turn);
         turn = changeTurnAnimation(turn);
         if (bot === true && end === false){
             botTurn();
@@ -275,7 +141,7 @@ columns[4].addEventListener('click',
     function e(){
         addPiece(boardByColumns, 4, turn);
         pieceAnimation(boardByColumns, 4, turn);
-        checkResult(boardByColumns);
+        checkResult(boardByColumns, turn);
         turn = changeTurnAnimation(turn);
         if (bot === true && end === false){
             botTurn();
@@ -287,7 +153,7 @@ columns[5].addEventListener('click',
     function f(){
         addPiece(boardByColumns, 5, turn);
         pieceAnimation(boardByColumns, 5, turn);
-        checkResult(boardByColumns);
+        checkResult(boardByColumns, turn);
         turn = changeTurnAnimation(turn);
         if (bot === true && end === false){
             botTurn();
@@ -299,7 +165,7 @@ columns[6].addEventListener('click',
     function g(){
         addPiece(boardByColumns, 6, turn);
         pieceAnimation(boardByColumns, 6, turn);
-        checkResult(boardByColumns);
+        checkResult(boardByColumns, turn);
         turn = changeTurnAnimation(turn);
         if (bot === true && end === false){
             botTurn();

@@ -443,7 +443,7 @@ module.exports = function(end, draw, turn, array, n){
             winspot.classList.add('winspot');
         }
     }
-    if (draw === true){
+    else if (draw === true){
         const endsentence = document.getElementById('endsentence');
         endsentence.textContent = `The Game Ended in a Draw!`
         const ending = document.getElementById('end');
@@ -522,116 +522,34 @@ module.exports = function (array) {
     return {end: false, n: i}
 };
 },{}],9:[function(require,module,exports){
-module.exports = function (func, wait, immediate) {
-	var timeout;
-	return function() {
-		var context = this, args = arguments;
-		var later = function() {
-			timeout = null;
-			if (!immediate) func.apply(context, args);
-		};
-		var callNow = immediate && !timeout;
-		clearTimeout(timeout);
-		timeout = setTimeout(later, wait);
-		if (callNow) func.apply(context, args);
-	};
-};
-},{}],10:[function(require,module,exports){
-module.exports = {
-    addPiece: require("./add-piece-to-board.js"),
-    changeTurn: require("./change-turn.js"),
-    animations: require("./animations")    ,
-    debounce: require('./helpers/debounce.js'),
-    check4InRow: require('./check-4-in-row.js')
+//Checks4inARow in all possible positions
+const generateBoardByRows = require('./generate-board-by-rows.js')
+const generateBoardByDiagonalsTopBot = require('./generate-board-by-diagonals-top-bot.js')
+const generateBoardByDiagonalsBotTop = require('./generate-board-by-diagonals-bot-top.js')
+const check4InRow = require('./check-4-in-row.js')
+const endGame = require('./animations/end-game.js')
+
+module.exports = function (boardByColumns, turn){
+
+    const boardInAllDirections = [
+        boardByColumns, 
+        generateBoardByRows(boardByColumns), 
+        generateBoardByDiagonalsTopBot(boardByColumns), 
+        generateBoardByDiagonalsBotTop(boardByColumns)
+    ]
+
+    boardInAllDirections.forEarch(board=>board.forEach(({content})=>{
+        const {end, n} = check4InRow(content)
+
+        endGame(end, undefined, turn, content, n);
+    }))
+
+    const draw = checkDraw();
+
+    endGame(end, draw, turn);
 }
-},{"./add-piece-to-board.js":2,"./animations":5,"./change-turn.js":7,"./check-4-in-row.js":8,"./helpers/debounce.js":9}],11:[function(require,module,exports){
-const { addPiece, debounce, check4InRow, animations: { pieceAnimation, changeTurnAnimation, endGame } } = require("./connect4-logic")
-
-const boardByColumns = require('./connect4-data/board.js')
-
-const buttonPVP = document.getElementById('PvP');
-const buttonPVB = document.getElementById('PvB');
-const buttonPlayAgain = document.getElementById('Play');
-
-const columns = Array.from(document.querySelectorAll('.column'));
-
-for (i in columns){
-    columns[i].addEventListener('mouseenter', (e)=>{
-        e.target.classList.add('mouseoncolumn')
-    })
-    columns[i].addEventListener('mouseleave', (e)=>{
-        e.target.classList.remove('mouseoncolumn')
-    })
-}
-
-//El juego empieza en turno 1 (Jugador 1), y cuando es falso es turno del jugador 2
-let turn = 1;
-
-// variable que nos dice si la partida se ha acabado
-let end = false;
-
-//Checks4inARow in the direction of the columns
-function checkColumns(){
-    for (var i=0; i<boardByColumns.length; i++){
-        const array = boardByColumns[i].content
-        const {end, n} = check4InRow(array)
-        endGame(end, draw, turn, array, n);
-    };
-};
-
-//Generates an array that represents the board row by row
-function returnBoardByRows(boardByColumns){
-    var boardByRows = []
-    for (var i=0; i<6;i++){
-        row = {content: []};
-        for (var j=0; j<7; j++){
-            row.content.push(
-                boardByColumns[j].content[5-i]
-            )
-        }
-        boardByRows.push(row);
-    }
-    return boardByRows;
-}
-
-//Checks4inARow in the direction of the rows
-function checkRows(boardByColumns){
-    boardByRows = returnBoardByRows(boardByColumns);
-
-    for (var i=0; i<boardByRows.length; i++){
-        end = check4InRow(boardByRows[i].content)
-        endGame(end, draw, turn);
-    };
-}
-
-//Generates an array that represents the board diagonal by diagonal (only de diagonals with 4 or more slots,
-// which can actualy have relevant patterns)
-function returnDiagonalsTopBot(boardByColumns){
-
-    var diagonalsTopBot = []
-
-    for(var i=0; i<3; i++){
-        diagonal = {content: []};
-        for (var j=0; j<(i+4); j++){
-            diagonal.content.push(
-                boardByColumns[j].content[i+3-j]
-            );
-        }
-        diagonalsTopBot.push(diagonal);
-    }
-
-    for(var i=0; i<3; i++){
-        diagonal = {content: []};
-        for (var j=0; j<(6-i); j++){
-            diagonal.content.push(
-                boardByColumns[i+j+1].content[5-j]
-            );
-        }
-        diagonalsTopBot.push(diagonal);
-    }
-    return diagonalsTopBot;
-};
-function returnDiagonalsBotTop(boardByColumns){
+},{"./animations/end-game.js":4,"./check-4-in-row.js":8,"./generate-board-by-diagonals-bot-top.js":10,"./generate-board-by-diagonals-top-bot.js":11,"./generate-board-by-rows.js":12}],10:[function(require,module,exports){
+module.exports = function (boardByColumns){
     var diagonalsBotTop = []
 
     for(var i=0; i<3; i++){
@@ -656,37 +574,98 @@ function returnDiagonalsBotTop(boardByColumns){
     return diagonalsBotTop;
 };
 
-//Checks4inARow in all the diagonals
-function checkDiagonals(boardByColumns){
-    var diagonalsTopBot = returnDiagonalsTopBot(boardByColumns);
-    var diagonalsBotTop = returnDiagonalsBotTop(boardByColumns);
+},{}],11:[function(require,module,exports){
+//Generates an array that represents the board diagonal by diagonal (only de diagonals with 4 or more slots,
+// which can actualy have relevant patterns)
+module.exports = function (boardByColumns){
 
-    for (var i=0; i<diagonalsTopBot.length; i++){
-        end = check4InRow(diagonalsTopBot[i].content);
-        endGame(end, draw, turn);
-        end = check4InRow(diagonalsBotTop[i].content);
-        endGame(end, draw, turn);    }
-};
+    var diagonalsTopBot = []
 
-var draw = false;
-function checkDraw(){
-    var drawScore = 0
-    for (column of boardByColumns){
-        if (column.full === true){
-            drawScore += 1
+    for(var i=0; i<3; i++){
+        diagonal = {content: []};
+        for (var j=0; j<(i+4); j++){
+            diagonal.content.push(
+                boardByColumns[j].content[i+3-j]
+            );
         }
+        diagonalsTopBot.push(diagonal);
     }
-    if (drawScore === 7){
-        draw = true;
+
+    for(var i=0; i<3; i++){
+        diagonal = {content: []};
+        for (var j=0; j<(6-i); j++){
+            diagonal.content.push(
+                boardByColumns[i+j+1].content[5-j]
+            );
+        }
+        diagonalsTopBot.push(diagonal);
     }
+    return diagonalsTopBot;
+};
+},{}],12:[function(require,module,exports){
+//Generates an array that represents the board row by row
+module.exports = function (boardByColumns){
+    var boardByRows = []
+    for (var i=0; i<6;i++){
+        row = {content: []};
+        for (var j=0; j<7; j++){
+            row.content.push(
+                boardByColumns[j].content[5-i]
+            )
+        }
+        boardByRows.push(row);
+    }
+    return boardByRows;
+}
+},{}],13:[function(require,module,exports){
+module.exports = function (func, wait, immediate) {
+	var timeout;
+	return function() {
+		var context = this, args = arguments;
+		var later = function() {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		var callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
+};
+},{}],14:[function(require,module,exports){
+module.exports = {
+    addPiece: require("./add-piece-to-board.js"),
+    changeTurn: require("./change-turn.js"),
+    animations: require("./animations")    ,
+    debounce: require('./helpers/debounce.js'),
+    check4InRow: require('./check-4-in-row.js'),
+    checkResult: require('./check-result.js'),
+    generateBoardByRows: require('./generate-board-by-rows.js'),
+    generateBoardDiagonalsTopBot: require('./generate-board-by-diagonals-top-bot.js'),
+    generateBoardDiagonalsBotTop: require('./generate-board-by-diagonals-bot-top.js'),
+}
+},{"./add-piece-to-board.js":2,"./animations":5,"./change-turn.js":7,"./check-4-in-row.js":8,"./check-result.js":9,"./generate-board-by-diagonals-bot-top.js":10,"./generate-board-by-diagonals-top-bot.js":11,"./generate-board-by-rows.js":12,"./helpers/debounce.js":13}],15:[function(require,module,exports){
+const { addPiece, debounce, animations: { pieceAnimation, changeTurnAnimation } } = require("./connect4-logic")
+
+const boardByColumns = require('./connect4-data/board.js')
+
+const buttonPVP = document.getElementById('PvP');
+const buttonPVB = document.getElementById('PvB');
+const buttonPlayAgain = document.getElementById('Play');
+
+const columns = Array.from(document.querySelectorAll('.column'));
+
+for (i in columns){
+    columns[i].addEventListener('mouseenter', (e)=>{
+        e.target.classList.add('mouseoncolumn')
+    })
+    columns[i].addEventListener('mouseleave', (e)=>{
+        e.target.classList.remove('mouseoncolumn')
+    })
 }
 
-//Checks4inARow in all possible positions
-function checkResult(boardByColumns){
-    end = checkColumns(boardByColumns) || checkRows(boardByColumns) || checkDiagonals(boardByColumns);
-    draw = checkDraw();
-    endGame(end, draw, turn);
-};
+//El juego empieza en turno 1 (Jugador 1), y alterna entre 1 y 2
+let turn = 1;
 
 
 buttonPlayAgain.addEventListener('click',
@@ -709,10 +688,8 @@ buttonPlayAgain.addEventListener('click',
         startMenu.classList.remove('hidden');
         //Reset turns
         turn = 1;
-        //Reset bot, end and draw
+        //Reset bot
         bot = false;  
-        end = false;
-        draw = false;
     }
 )
 
@@ -1124,4 +1101,4 @@ function pickScores(scores){
         };
     };
 };
-},{"./connect4-data/board.js":1,"./connect4-logic":10}]},{},[11]);
+},{"./connect4-data/board.js":1,"./connect4-logic":14}]},{},[15]);

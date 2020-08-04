@@ -9,7 +9,7 @@ module.exports = function(end, draw, turn, array, n){
             winspot.classList.add('winspot');
         }
     }
-    if (draw === true){
+    else if (draw === true){
         const endsentence = document.getElementById('endsentence');
         endsentence.textContent = `The Game Ended in a Draw!`
         const ending = document.getElementById('end');
