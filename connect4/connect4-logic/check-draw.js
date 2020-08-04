@@ -1,6 +1,6 @@
 //Checks for draws
 
-module.exports = function (draw){
+module.exports = function (boardByColumns){
     var drawScore = 0
     for (column of boardByColumns){
         if (column.full === true){
@@ -8,6 +8,6 @@ module.exports = function (draw){
         }
     }
     if (drawScore === 7){
-        return draw = true;
+        return true;
     }
 }

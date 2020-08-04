@@ -15,19 +15,3 @@ module.exports = function (turn){
 
     return turn
 }
-
-
-// function changeTurn(){
-//     const docTurn = document.getElementById('turn');
-
-//     docTurn.classList.remove(`player${turn}`);
-
-//     if (turn === 1){
-//         turn = 2; 
-//     } else if (turn === 2){
-//         turn = 1;
-//     }
-//     docTurn.textContent = `Player ${turn}`;
-
-//     docTurn.classList.add(`player${turn}`);
-// }

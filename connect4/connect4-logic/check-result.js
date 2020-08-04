@@ -4,6 +4,7 @@ const generateBoardByDiagonalsTopBot = require('./generate-board-by-diagonals-to
 const generateBoardByDiagonalsBotTop = require('./generate-board-by-diagonals-bot-top.js')
 const check4InRow = require('./check-4-in-row.js')
 const endGame = require('./animations/end-game.js')
+const checkDraw = require('./check-draw.js')
 
 module.exports = function (boardByColumns, turn){
 
@@ -14,13 +15,13 @@ module.exports = function (boardByColumns, turn){
         generateBoardByDiagonalsBotTop(boardByColumns)
     ]
 
-    boardInAllDirections.forEarch(board=>board.forEach(({content})=>{
+    boardInAllDirections.forEach(board=>board.forEach(({content})=>{
         const {end, n} = check4InRow(content)
 
         endGame(end, undefined, turn, content, n);
     }))
 
-    const draw = checkDraw();
+    const draw = checkDraw(boardByColumns);
 
     endGame(end, draw, turn);
 }
