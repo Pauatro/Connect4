@@ -1,4 +1,5 @@
-[
+//An array that represents the board column by column
+module.exports = [
     {
         "column": "a",
         "full": false,
